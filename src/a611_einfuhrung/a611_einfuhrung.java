@@ -1,128 +1,100 @@
 import java.util.Scanner;
 
-class Fahrkartenautomat {
+class TicketMachine {
     public static void main(String[] args) {
         
-        // A6.3.1: Method call
-        begruessung();
+        // A6.3.1: Calling the greeting method at the start
+        greeting();
 
-        Scanner tastatur = new Scanner(System.in);
+        Scanner keyboard = new Scanner(System.in);
 
-        double gesamtsumme = 0.0;
-        double eingezahlterGesamtbetrag = 0.0;
-        double eingeworfeneMuenze;
-        double rueckgabebetrag;
-        double nochZuZahlen;
-        int wahl;
-        int anzahlTickets;
+        double totalSum = 0.0;
+        double totalPaid = 0.0;
+        double insertedCoin;
+        double changeAmount;
+        double stillToPay;
+        int choice;
+        int ticketCount;
 
-        // Auswahl-Schleife
+        // Selection loop for multiple tickets
         while (true) {
-            System.out.println("Wählen Sie ihre Wunschfahrkarte für Berlin AB aus:");
-            System.out.println("Kurzstrecke AB [2,00 EUR] (1)");
-            System.out.println("Einzelfahrschein AB [3,00 EUR] (2)");
-            System.out.println("Tageskarte Regeltarif AB [8,80 EUR] (3)");
-            System.out.println("4-Fahrten-Karte AB [9,40 EUR] (4)");
-            System.out.println("Bezahlen (9)");
+            System.out.println("Please choose your ticket for Berlin AB:");
+            System.out.println("Short distance AB [2.00 EUR] (1)");
+            System.out.println("Single ticket AB [3.00 EUR] (2)");
+            System.out.println("Day pass Regular AB [8.80 EUR] (3)");
+            System.out.println("4-Trip-Ticket AB [9.40 EUR] (4)");
+            System.out.println("Pay now (9)");
             
-            System.out.print("\nIhre Wahl: ");
-            wahl = tastatur.nextInt();
+            System.out.print("\nYour choice: ");
+            choice = keyboard.nextInt();
 
-            if (wahl == 9) {
-                if (gesamtsumme > 0) {
+            // Exit loop to start payment
+            if (choice == 9) {
+                if (totalSum > 0) {
                     break; 
                 } else {
-                    System.out.println(" >> Bitte wählen Sie erst eine Fahrkarte aus, bevor Sie bezahlen. <<");
+                    System.out.println(" >> Please select a ticket before paying. <<");
                     continue;
                 }
             }
 
-            double ticketPreis = 0.0;
-            if (wahl == 1) {
-                ticketPreis = 2.00;
-            } else if (wahl == 2) {
-                ticketPreis = 3.00;
-            } else if (wahl == 3) {
-                ticketPreis = 8.80;
-            } else if (wahl == 4) {
-                ticketPreis = 9.40;
+            // Setting the price based on choice
+            double ticketPrice = 0.0;
+            if (choice == 1) {
+                ticketPrice = 2.00;
+            } else if (choice == 2) {
+                ticketPrice = 3.00;
+            } else if (choice == 3) {
+                ticketPrice = 8.80;
+            } else if (choice == 4) {
+                ticketPrice = 9.40;
             } else {
-                System.out.println(" >>falsche Bedienung<<");
+                System.out.println(" >> Invalid selection <<");
                 continue;
             }
 
+            // Asking for ticket quantity
             while (true) {
-                System.out.print("Anzahl der Tickets: ");
-                anzahlTickets = tastatur.nextInt();
-                if (anzahlTickets >= 1 && anzahlTickets <= 10) {
+                System.out.print("Number of tickets: ");
+                ticketCount = keyboard.nextInt();
+                if (ticketCount >= 1 && ticketCount <= 10) {
                     break;
                 } else {
-                    System.out.println(" >> Wählen Sie bitte eine Anzahl von 1 bis 10 Tickets aus. <<");
+                    System.out.println(" >> Please choose between 1 and 10 tickets. <<");
                 }
             }
 
-            gesamtsumme += ticketPreis * anzahlTickets;
-            System.out.printf("Zwischensumme: %.2f €\n\n", gesamtsumme);
+            // Update the total sum
+            totalSum += ticketPrice * ticketCount;
+            System.out.printf("Intermediate total: %.2f €\n\n", totalSum);
         }
 
-        // Geldeinwurf
-        while (eingezahlterGesamtbetrag < gesamtsumme) {
-            nochZuZahlen = gesamtsumme - eingezahlterGesamtbetrag;
-            System.out.printf("Noch zu zahlen: %.2f €\n", nochZuZahlen);
-            System.out.print("Eingabe (mind. 5 Cent, höchstens 2 Euro): ");
-            eingeworfeneMuenze = tastatur.nextDouble();
+        // Payment process
+        while (totalPaid < totalSum) {
+            stillToPay = totalSum - totalPaid;
+            System.out.printf("Still to pay: %.2f €\n", stillToPay);
+            System.out.print("Insert coin (0.05 to 2.00 Euro): ");
+            insertedCoin = keyboard.nextDouble();
 
-            if (eingeworfeneMuenze == 0.05 || eingeworfeneMuenze == 0.1 || eingeworfeneMuenze == 0.2 || 
-                eingeworfeneMuenze == 0.5 || eingeworfeneMuenze == 1.0 || eingeworfeneMuenze == 2.0) {
-                eingezahlterGesamtbetrag += eingeworfeneMuenze;
+            // Checking for valid coins
+            if (insertedCoin == 0.05 || insertedCoin == 0.1 || insertedCoin == 0.2 || 
+                insertedCoin == 0.5 || insertedCoin == 1.0 || insertedCoin == 2.0) {
+                totalPaid += insertedCoin;
             } else {
-                System.out.println(" >> Kein gültiges Zahlungsmittel");
+                System.out.println(" >> Invalid coin");
             }
         }
 
-        System.out.println("\nFahrschein wird ausgegeben");
+        // Issuing the ticket
+        System.out.println("\nTicket is being issued");
         System.out.println("========");
 
-        rueckgabebetrag = eingezahlterGesamtbetrag - gesamtsumme;
-        if (rueckgabebetrag > 0.0) {
-            System.out.printf("Der Rückgabebetrag in Höhe von %.2f Euro \n", rueckgabebetrag);
-            System.out.println("wird in folgenden Münzen ausgezahlt:");
+        // Calculating and paying out change
+        changeAmount = totalPaid - totalSum;
+        if (changeAmount > 0.0) {
+            System.out.printf("Your change of %.2f Euro \n", changeAmount);
+            System.out.println("will be paid in the following coins:");
 
-            while (rueckgabebetrag >= 2.0) {
+            // Returning coins from largest to smallest
+            while (changeAmount >= 2.0) {
                 System.out.println("2 Euro");
-                rueckgabebetrag = Math.round((rueckgabebetrag - 2.0) * 100.0) / 100.0;
-            }
-            while (rueckgabebetrag >= 1.0) {
-                System.out.println("1 Euro");
-                rueckgabebetrag = Math.round((rueckgabebetrag - 1.0) * 100.0) / 100.0;
-            }
-            while (rueckgabebetrag >= 0.5) {
-                System.out.println("50 Cent");
-                rueckgabebetrag = Math.round((rueckgabebetrag - 0.5) * 100.0) / 100.0;
-            }
-            while (rueckgabebetrag >= 0.2) {
-                System.out.println("20 Cent");
-                rueckgabebetrag = Math.round((rueckgabebetrag - 0.2) * 100.0) / 100.0;
-            }
-            while (rueckgabebetrag >= 0.1) {
-                System.out.println("10 Cent");
-                rueckgabebetrag = Math.round((rueckgabebetrag - 0.1) * 100.0) / 100.0;
-            }
-            while (rueckgabebetrag >= 0.05) {
-                System.out.println("5 Cent");
-                rueckgabebetrag = Math.round((rueckgabebetrag - 0.05) * 100.0) / 100.0;
-            }
-        }
-
-        System.out.println("\nVergessen Sie nicht, den Fahrschein vor Fahrtantritt entwerten zu lassen!");
-        System.out.println("Wir wünschen Ihnen eine gute Fahrt.");
-        
-        tastatur.close();
-    }
-
-    // Methode für A6.3.1
-    public static void begruessung() {
-        System.out.println("Herzlich Willkommen!");
-        System.out.println();
-    }
-}

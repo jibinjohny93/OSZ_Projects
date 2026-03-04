@@ -14,7 +14,7 @@ public class A621_volumen {
 
     public static double volumenWuerfel(double seitenlaenge) {
         double volumen = seitenlaenge * seitenlaenge * seitenlaenge;
-        return volumen;
+        return volumen; 
 		
 
 	}

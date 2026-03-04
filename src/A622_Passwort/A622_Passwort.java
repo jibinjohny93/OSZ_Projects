@@ -15,7 +15,7 @@ public class A622_Passwort {
         System.out.println("Suche beendet.");
     }
 
-    // Kopierte Methode aus der Aufgabe
+    // Kopierte Methode
     public static boolean checkPasscode(int H4X0R) {
         boolean result = false; 
         for (int E1337 = 42; E1337 <= (52 ^ (0x6c)); E1337 += (3 << (14 % 6))) { 
